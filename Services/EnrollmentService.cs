@@ -55,7 +55,9 @@ else
 _logger.LogWarning("Deleted faild for enrollment {EnrollmentId} not found", id);
 return Task.FromResult(removed);
 }
+
 }
+public class TmsDatabaseException(string message) : Exception(message);
 //--- The data shape--
 public record EnrollmentRecord(
 string Id,
