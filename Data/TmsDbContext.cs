@@ -8,4 +8,12 @@ public class TmsDbContext(DbContextOptions<TmsDbContext> options) : DbContext(op
       public DbSet<Enrollment> Enrollments => Set<Enrollment>();
   public DbSet<Assessment> Assessment => Set<Assessment>();
   public DbSet<Certificate> Certificate => Set<Certificate>();
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.ApplyConfigurationsFromAssembly(typeof(TmsDbContext).Assembly);
+
+    base.OnModelCreating(modelBuilder);
 }
+}
+
