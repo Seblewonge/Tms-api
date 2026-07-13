@@ -17,7 +17,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(s => s.Name)
             .IsRequired()
             .HasMaxLength(100);
-
+         builder.HasQueryFilter(s => !s.IsDeleted);
         builder.Property(s => s.GPA)
             .HasPrecision(3, 2);
 
@@ -30,5 +30,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.HasMany(s => s.Enrollments)
             .WithOne(e => e.Student)
             .HasForeignKey(e => e.StudentId);
+builder.Property<DateTime>("LastUpdated")
+.HasDefaultValueSql("CURRENT_TIMESTAMP");
     }
 }
