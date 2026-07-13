@@ -113,4 +113,42 @@ public async Task<IActionResult> GetTopCourses(
 
     return Ok(result);
 }
+[HttpGet("nplusone")]
+public async Task<IActionResult> NPlusOne(CancellationToken cancellationToken)
+{
+    var students = await context.Students
+        .AsNoTracking()
+        .ToListAsync(cancellationToken);
+
+    var result = new List<object>();
+
+    foreach (var s in students)
+    {
+        var count = await context.Enrollments
+            .AsNoTracking()
+            .CountAsync(e => e.StudentId == s.Id, cancellationToken);
+
+        result.Add(new
+        {
+            s.Name,
+            EnrollmentCount = count
+        });
+    }
+
+    return Ok(result);
+}
+[HttpGet("shaped-query")]
+public async Task<IActionResult> ShapedQuery(CancellationToken cancellationToken)
+{
+    var report = await context.Students
+        .AsNoTracking()
+        .Select(s => new
+        {
+            s.Name,
+            EnrollmentCount = s.Enrollments.Count
+        })
+        .ToListAsync(cancellationToken);
+
+    return Ok(report);
+}
 }
