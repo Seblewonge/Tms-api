@@ -1,4 +1,5 @@
 // module 4 exercise 2
+using TmsApi.Services;
 public class EnrollmentWorker
 {
     private readonly IServiceScopeFactory _scopeFactory;
@@ -17,9 +18,9 @@ public class EnrollmentWorker
         var svc = scope.ServiceProvider.GetRequiredService<IEnrollmentService>();
 
         // ✅ Use the service
-        var all = svc.GetAllAsync().Result;
+        // var all = svc.GetAllAsync().Result;
 
         // Example: log or process enrollments
-        Console.WriteLine($"Processed {all.Count} enrollments at {DateTime.UtcNow}");
+        // Console.WriteLine($"Processed {all.Count} enrollments at {DateTime.UtcNow}");
     }
 }
