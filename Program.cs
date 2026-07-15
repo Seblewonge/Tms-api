@@ -4,12 +4,18 @@ using Scalar.AspNetCore;
 using TmsApi.Middleware;
 using TmsApi.Data;
 using TmsApi.Entities;
+using TmsApi.Services;
+using Tms.Api.Dtos;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 // Services
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<IEnrollmentService,EnrollmentService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+
+
 builder.Services
     .AddAuthentication("Training")
     .AddScheme<AuthenticationSchemeOptions, TrainingAuthHandler>(
@@ -61,7 +67,7 @@ app.MapGet("/api/assessments/results", () =>
 .RequireAuthorization();
 app.MapGet("/api/error", () =>
 {
-throw new TmsDatabaseException("Simulated database failure for ProblemDetails testing");
+throw new Exception("Simulated database failure for ProblemDetails testing");
 });
 // Seed test data at startup
 using (var scope = app.Services.CreateScope())
@@ -81,9 +87,9 @@ new() { RegistrationNumber = "TMS-2026-0005", Name = "EvanWright", GPA = 2.5m,  
 context.Students.AddRange(students);
 var courses = new List<Course>
 {
-new() { Code = "CS-101", Title = "Introduction to ComputerScience", Capacity = 30 },
-new() { Code = "CS-201", Title = "Data Structures and Algorithms", Capacity = 25 },
-new() { Code = "MAT-101", Title = "Calculus I", Capacity =40 }
+new() { Code = "CS-101", Title = "Introduction to ComputerScience", MaxCapacity = 30 },
+new() { Code = "CS-201", Title = "Data Structures and Algorithms", MaxCapacity = 25 },
+new() { Code = "MAT-101", Title = "Calculus I", MaxCapacity =40 }
 };
 context.Courses.AddRange(courses);
 context.SaveChanges();
