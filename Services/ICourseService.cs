@@ -15,4 +15,7 @@ public interface ICourseService
     Task<bool> CodeExistsAsync(
         string code,
         CancellationToken ct);
+Task<PagedResponse<CourseResponseDto>> GetCoursesAsync(PagedRequest
+request, CancellationToken ct);
+
 }
