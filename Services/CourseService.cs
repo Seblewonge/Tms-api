@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TmsApi.Data;
 using TmsApi.Entities;
 using Tms.Api.Dtos;
-using TmsApi.Services;
+namespace TmsApi.Services;
 
 public class CourseService(
     TmsDbContext context,

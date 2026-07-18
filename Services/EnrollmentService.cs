@@ -3,7 +3,7 @@ using TmsApi.Data;
 using TmsApi.Dtos.Enrollment;
 using TmsApi.Entities;
 
-using TmsApi.Services;
+namespace TmsApi.Services;
 
 
 public class EnrollmentService(TmsDbContext context, ILogger<EnrollmentService> logger) : IEnrollmentService
