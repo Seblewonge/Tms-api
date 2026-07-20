@@ -2,11 +2,13 @@ using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Scalar.AspNetCore;
-using TmsApi.Middleware;
-using TmsApi.Data;
-using TmsApi.Services;
-using TmsApi.Data.Persistence;
-using Tms.Api.Filters;
+using TmsApi.Api.Filters;
+using TmsApi.Infrastructure.Persistence;
+using TmsApi.Api.Middlewares;
+using TmsApi.Api.Options;
+using TmsApi.Application.Interfaces;
+using TmsApi.Infrastructure.Services;
+using TmsApi.Infrastructure.SeedData; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +40,13 @@ builder.Services
     .ValidateOnStart();
 
 // Database
+// builder.Services.AddDbContext<TmsDbContext>(options =>
+//     options.UseNpgsql(
+//         builder.Configuration.GetConnectionString("TmsDatabase"))
+//     .LogTo(Console.WriteLine, LogLevel.Information)
+//     .EnableSensitiveDataLogging());
 builder.Services.AddDbContext<TmsDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("TmsDatabase"))
-    .LogTo(Console.WriteLine, LogLevel.Information)
-    .EnableSensitiveDataLogging());
+options.UseNpgsql(builder.Configuration.GetConnectionString("TmsDatabase")));
 
 builder.Services.AddOpenApi("v1", options =>
 {
