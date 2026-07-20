@@ -114,7 +114,7 @@ public async Task<PagedResponse<CourseResponseDto>> GetCoursesAsync(
                 : query.OrderBy(c => c.MaxCapacity);
             break;
 
-        case "Title":
+        //case "Title":
         default:
             sortedQuery = request.Descending
                 ? query.OrderByDescending(c => c.Title)
