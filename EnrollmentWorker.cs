@@ -1,5 +1,5 @@
 // module 4 exercise 2
-using TmsApi.Services;
+
 public class EnrollmentWorker
 {
     private readonly IServiceScopeFactory _scopeFactory;
