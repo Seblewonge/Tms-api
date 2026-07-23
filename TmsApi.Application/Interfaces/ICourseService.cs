@@ -1,10 +1,13 @@
 using TmsApi.Application.DTOs.Course;
+using TmsApi.Domain.Entities;
 using TmsApi.Application.DTOs.Paged;
 namespace TmsApi.Application.Interfaces;
 
 public interface ICourseService
 {
-    // Task<Course?> GetByIdAsync(int id, CancellationToken ct);
+     Task<Course?> GetByCodeAsync(
+        string code,
+        CancellationToken ct);
     Task<CourseResponseDto?> GetByIdAsync(
          int id,
          CancellationToken ct);

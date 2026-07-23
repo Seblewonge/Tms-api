@@ -2,14 +2,19 @@ using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Scalar.AspNetCore;
+using TmsApi.Api;
 using TmsApi.Api.Filters;
 using TmsApi.Infrastructure.Persistence;
 using TmsApi.Api.Middlewares;
 using TmsApi.Api.Options;
 using TmsApi.Application.Interfaces;
 using TmsApi.Infrastructure.Services;
-using TmsApi.Infrastructure.SeedData; 
-
+using TmsApi.Infrastructure.SeedData;
+using MediatR;
+using FluentValidation;
+using TmsApi.Application.Behaviors;
+using TmsApi.Application.Enrollments.Commands; 
+using TmsApi.Api.ExceptionHandlers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -17,7 +22,16 @@ builder.Services.AddOpenApi();
 // Controllers and services
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(EnrollStudentHandler).Assembly));
 
+builder.Services.AddValidatorsFromAssembly(typeof(EnrollStudentValidator).Assembly);
+
+// LoggingBehavior FIRST
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddControllers(options =>
@@ -70,18 +84,7 @@ options.ApiVersionReader = new UrlSegmentApiVersionReader();
 options.GroupNameFormat = "'v'VVV";
 options.SubstituteApiVersionInUrl = true;
 });
-// update your scalar config
-// app.MapScalarApiReference(options =>
-// {
-// options.WithTitle("TMS API Reference")
-// .WithTheme(ScalarTheme.DeepSpace)
-// .WithDefaultHttpClient(ScalarTarget.CSharp,
-// ScalarClient.HttpClient);
-// // Tell Scalar to pull both documents into its sidebar dropdown
-// options
-// .AddDocument("v1", "API Version 1.0")
-// .AddDocument("v2", "API Version 2.0");
-// });
+
  var app = builder.Build();
 
 

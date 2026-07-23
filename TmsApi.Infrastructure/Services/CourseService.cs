@@ -74,13 +74,21 @@ public async Task<CourseResponseDto> CreateAsync(
 
     return (await GetByIdAsync(course.Id, ct))!;
 }
-public Task<bool> CodeExistsAsync(
+    public Task<bool> CodeExistsAsync(
+        string code,
+        CancellationToken ct)
+    {
+        return context.Courses
+            .AsNoTracking()
+            .AnyAsync(c => c.Code == code, ct);
+    }
+public async Task<Course?> GetByCodeAsync(
     string code,
     CancellationToken ct)
 {
-    return context.Courses
-        .AsNoTracking()
-        .AnyAsync(c => c.Code == code, ct);
+    return await context.Courses
+        .Include(c => c.Enrollments)
+        .FirstOrDefaultAsync(c => c.Code == code, ct);
 }
 public async Task<PagedResponse<CourseResponseDto>> GetCoursesAsync(
     PagedRequest request,
